@@ -22,18 +22,23 @@ public class MyController {
     }
 
     @GetMapping(path = "/all")
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
     @PostMapping(consumes = {"application/json"})
-    public ResponseEntity<String> postUser(@RequestBody User user){
+    public ResponseEntity<String> postUser(@RequestBody User user) {
         return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User user){
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
         return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Integer userId) {
+        return new ResponseEntity<>(userService.deleteUser(userId), HttpStatus.OK);
     }
 
 

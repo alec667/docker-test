@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(User user) {
         Optional<User> optional = userRepository.findById(user.getUserId());
-        if (optional.isPresent()){
+        if (optional.isPresent()) {
             User updatedUser = optional.get();
 
             updatedUser.setUserId(user.getUserId());
@@ -52,11 +52,21 @@ public class UserServiceImpl implements UserService {
 
             userRepository.save(updatedUser);
             return updatedUser;
-        }else {
+        } else {
             userRepository.save(user);
             return user;
         }
     }
 
+    @Override
+    public String deleteUser(Integer userId) {
+        Optional<User> optional = userRepository.findById(userId);
+        if (optional.isPresent()) {
+            userRepository.deleteById(userId);
+            return "User ID: " + userId + " DELETED";
+        } else {
+            return "User ID: " + userId + " doesn't exist";
+        }
+    }
 
 }
