@@ -27,8 +27,13 @@ public class MyController {
     }
 
     @PostMapping(consumes = {"application/json"})
-    public ResponseEntity<User> postUser(@RequestBody User user){
+    public ResponseEntity<String> postUser(@RequestBody User user){
         return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<User> updateUser(@RequestBody User user){
+        return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
     }
 
 
