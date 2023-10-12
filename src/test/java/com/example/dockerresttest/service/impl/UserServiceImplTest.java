@@ -6,7 +6,9 @@ import com.example.dockerresttest.service.UserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
@@ -14,8 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class UserServiceImplTest {
 
@@ -52,8 +53,8 @@ class UserServiceImplTest {
     void getAllUsers() {
         mock(User.class);
         mock(UserRepository.class);
-        User testUser2 = new User(99,"User 99", "Address 99");
-        List<User> userList= Arrays.asList(testUser, testUser2);
+        User testUser2 = new User(99, "User 99", "Address 99");
+        List<User> userList = Arrays.asList(testUser, testUser2);
 
         when(userRepository.findAll()).thenReturn(userList);
         assertThat(userService.getAllUsers()).isEqualTo(userList);
@@ -82,5 +83,11 @@ class UserServiceImplTest {
 
     @Test
     void deleteUser() {
+        mock(User.class);
+        mock(UserRepository.class, Mockito.CALLS_REAL_METHODS);
+        String response = "User ID: " + testUser.getUserId() + " doesn't exist";
+
+        doAnswer(Answers.CALLS_REAL_METHODS).when(userRepository).deleteById(any());
+        assertThat(userService.deleteUser(9)).isEqualTo(response);
     }
 }
