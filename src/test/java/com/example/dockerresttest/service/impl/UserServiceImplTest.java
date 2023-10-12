@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +55,7 @@ class UserServiceImplTest {
         mock(User.class);
         mock(UserRepository.class);
         User testUser2 = new User(99, "User 99", "Address 99");
-        List<User> userList = Arrays.asList(testUser, testUser2);
+        List<User> userList = new ArrayList<>(Arrays.asList(testUser, testUser2));
 
         when(userRepository.findAll()).thenReturn(userList);
         assertThat(userService.getAllUsers()).isEqualTo(userList);

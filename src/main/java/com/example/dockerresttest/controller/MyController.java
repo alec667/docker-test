@@ -16,12 +16,12 @@ public class MyController {
     @Autowired
     UserService userService;
 
-    @GetMapping(path = "{userId}")
+    @GetMapping(path = "{userId}", produces = {"application/json"})
     public ResponseEntity<User> getUser(@PathVariable("userId") Integer userId) {
         return new ResponseEntity<>(userService.getUserService(userId), HttpStatus.OK);
     }
 
-    @GetMapping(path = "/all")
+    @GetMapping(path = "/all", produces = {"application/json"})
     public ResponseEntity<List<User>> getAllUsers() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
@@ -31,7 +31,7 @@ public class MyController {
         return new ResponseEntity<>(userService.addUser(user), HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping(consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
     }
