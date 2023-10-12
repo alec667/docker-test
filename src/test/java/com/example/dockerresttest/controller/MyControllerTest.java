@@ -76,11 +76,23 @@ class MyControllerTest {
     }
 
     @Test
-    void getAllUsers() {
+    void getAllUsers() throws Exception {
+        when(userService.getAllUsers()).thenReturn(userList);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .get("/user/all")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.notNullValue()))
+                .andExpect(jsonPath("$[0].userName", Matchers.is("User 9")))
+                .andExpect(jsonPath("$[1].userAddress", Matchers.is("Address 10")));
     }
 
     @Test
     void postUser() {
+        
     }
 
     @Test
