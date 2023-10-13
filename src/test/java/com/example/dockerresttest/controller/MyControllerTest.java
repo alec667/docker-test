@@ -2,6 +2,7 @@ package com.example.dockerresttest.controller;
 
 import com.example.dockerresttest.model.User;
 import com.example.dockerresttest.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.hamcrest.Matchers;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -91,15 +93,55 @@ class MyControllerTest {
     }
 
     @Test
-    void postUser() {
-        
+    void postUser() throws Exception {
+        User nUser = new User(11, "User 11", "Address 11");
+        String content = objectWriter.writeValueAsString(nUser);
+
+        when(userService.addUser(nUser)).thenReturn("User created successfully");
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .post("/user")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(content);
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isCreated())
+                .andExpect(result ->
+                        assertThat(result.getResponse().getContentAsString())
+                                .isEqualTo("User created successfully"));
     }
 
     @Test
-    void updateUser() {
+    void updateUser() throws Exception {
+        User updatedUser = new User(9, "User 999", "Address 999");
+        String content = objectWriter.writeValueAsString(updatedUser);
+
+        when(userService.updateUser(updatedUser)).thenReturn(updatedUser);
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .put("/user")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", Matchers.notNullValue()))
+                .andExpect(jsonPath("$.userName", Matchers.is(updatedUser.getUserName())));
     }
 
     @Test
-    void deleteUser() {
+    void deleteUser() throws Exception {
+        when(userService.deleteUser(9)).thenReturn("User ID: 9 DELETED");
+
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders
+                .delete("/user/9");
+
+        mockMvc.perform(mockRequest)
+                .andExpect(status().isOk())
+                .andExpect(result ->
+                        assertThat(result.getResponse().getContentAsString())
+                                .isEqualTo("User ID: 9 DELETED"));
     }
 }
