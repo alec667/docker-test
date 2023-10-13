@@ -2,7 +2,6 @@ package com.example.dockerresttest.controller;
 
 import com.example.dockerresttest.model.User;
 import com.example.dockerresttest.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.hamcrest.Matchers;
