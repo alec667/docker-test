@@ -33,12 +33,13 @@ class UserServiceImplTest {
         autoCloseable = MockitoAnnotations.openMocks(this);
         this.userService = new UserServiceImpl(userRepository);
         testUser = new User(9, "User 9", "Address 9");
-        userService.addUser(testUser);
+        userRepository.save(testUser);
     }
 
     @AfterEach
     void tearDown() throws Exception {
         autoCloseable.close();
+        userRepository.deleteAll();
     }
 
     @Test
