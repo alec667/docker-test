@@ -1,5 +1,6 @@
 package com.example.dockerresttest.service.impl;
 
+import com.example.dockerresttest.exception.UserNotFoundException;
 import com.example.dockerresttest.model.User;
 import com.example.dockerresttest.repository.UserRepository;
 import com.example.dockerresttest.service.UserService;
@@ -25,8 +26,10 @@ public class UserServiceImpl implements UserService {
         if (optional.isPresent()) {
             user = optional.get();
             return user;
+        } else {
+            throw new UserNotFoundException("User not Found :(");
         }
-        return user;
+
     }
 
     @Override
