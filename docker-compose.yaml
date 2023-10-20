@@ -9,7 +9,13 @@ services:
       - MYSQL_DATABASE=docker_test
     volumes: 
       - /var/lib/mysql
-      - ./_data:/var/lib/mysql  
+      - ./_data:/var/lib/mysql 
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3306"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s   
   app:
     image: docker-rest-test:1.0
     ports:
@@ -17,6 +23,6 @@ services:
     restart: on-failure
     depends_on:
       mysql: 
-        condition: service_started
+        condition: service_healthy
     links:
       - mysql
