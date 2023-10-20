@@ -10,7 +10,6 @@ public class UserExceptionHandler {
 
     @ExceptionHandler(value = UserNotFoundException.class)
     public ResponseEntity<Object> userNotFound(UserNotFoundException userNotFoundException) {
-        UserNotFoundException notFoundException = new UserNotFoundException("User not Found :(");
-        return new ResponseEntity<>(notFoundException.getLocalizedMessage(), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(userNotFoundException.getLocalizedMessage(), HttpStatus.NOT_FOUND);
     }
 }
