@@ -11,7 +11,7 @@ services:
       - /var/lib/mysql
       - ./_data:/var/lib/mysql  
   app:
-    image: docker-rest-test 
+    image: docker-rest-test:1.0
     ports:
       - "8081:8081"
     restart: on-failure
