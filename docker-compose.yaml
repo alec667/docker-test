@@ -6,16 +6,15 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=docker_test
-    volumes: 
-      - /var/lib/mysql
-      - ./_data:/var/lib/mysql 
+      - MYSQL_DATABASE=docker_test   
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3306"]
       interval: 1m30s
       timeout: 10s
       retries: 3
-      start_period: 40s   
+      start_period: 40s 
+    volumes:
+    - ./db-data:/var/lib/mysql 
   app:
     image: docker-rest-test:1.0
     ports:
@@ -26,3 +25,6 @@ services:
         condition: service_healthy
     links:
       - mysql
+volumes: 
+  db-data:
+    driver: local
